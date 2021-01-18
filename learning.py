@@ -26,8 +26,8 @@ class learner:
         return result
 
 
-    def learning(self):
-        file = open("training_set1.txt" , 'r')
+    def learning(self,tsn):
+        file = open("training_set" + tsn + ".txt" , 'r')
         j = open('weights.txt' , 'r')
         result = open('result.txt' , 'w')
         weights = json.load(j)
@@ -70,6 +70,7 @@ class learner:
         file.close()
         result.close()
 if __name__ == "__main__":
+    training_set_number = input("enter training set number : ")
     l = learner()
-    l.learning()
+    l.learning(training_set_number)
 
