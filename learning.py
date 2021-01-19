@@ -25,13 +25,23 @@ class learner:
                 result = i
         return result
 
+    def deleteStopWords(self , text , stopwords):
+        t1 = []
+        for w in text:
+            if not w[0] in stopwords:
+                t1.append(w)
+        return t1
+
 
     def learning(self,tsn):
+        print("learning")
         file = open("training_set" + tsn + ".txt" , 'r')
         j = open('weights.txt' , 'r')
         result = open('result.txt' , 'w')
         weights = json.load(j)
         j.close()
+        #stopwords = list(open('resources/stopwords.txt' , 'r' , encoding="utf8").read().splitlines())
+        lx = [0,0,0,0,0]
         while True:
             # Get next line from file 
             line = file.readline() 
@@ -45,6 +55,7 @@ class learner:
             text = text[0]
             
             s = self.text_proccessor(text)
+            #s = self.deleteStopWords(s , stopwords)
             activation_list = [0,0,0,0,0]
             for i in s:
                 if not i in weights.keys():
@@ -55,8 +66,9 @@ class learner:
 
             # update weights
             estimate_label = self.argMax(activation_list)
-            print(estimate_label)
+            #print(estimate_label , real_label)
             if estimate_label != real_label:
+                lx[real_label] += 1
                 for i in s:
                     for a in range(5):
                         if a == real_label:
@@ -69,6 +81,7 @@ class learner:
         j.close()
         file.close()
         result.close()
+        print(lx , sum(lx))
 if __name__ == "__main__":
     training_set_number = input("enter training set number : ")
     l = learner()
