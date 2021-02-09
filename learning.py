@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
 import json
 from hazm import *
+import sqlite3
 
-class learner:
+class Learner:
     def text_proccessor(self,text):
         normalizer = Normalizer()
         stemmer = Stemmer()
@@ -32,36 +33,34 @@ class learner:
                 t1.append(w)
         return t1
 
+    def makeZeroList(self , n):
+        l = []
+        for i in range(n):
+            l.append(0)
+        return l
 
-    def learning(self,tsn):
+    def learning(self):
         print("learning")
-        file = open("training_set" + tsn + ".txt" , 'r')
+        conn = sqlite3.connect("ai_db.db")
+        cur = conn.cursor()
         j = open('weights.txt' , 'r')
         result = open('result.txt' , 'w')
         weights = json.load(j)
         j.close()
+        l = cur.execute("select text , label from sample")
         #stopwords = list(open('resources/stopwords.txt' , 'r' , encoding="utf8").read().splitlines())
-        lx = [0,0,0,0,0]
-        while True:
-            # Get next line from file 
-            line = file.readline() 
-            # if line is empty 
-            # end of file is reached 
-            if not line: 
-                break
-
-            text = line.split("/")
-            real_label = int(text[1])
-            text = text[0]
+        lx = self.makeZeroList(16)
+        for sample in list(l):
+            real_label = int(sample[1])
+            text = sample[0]
             
             s = self.text_proccessor(text)
-            #s = self.deleteStopWords(s , stopwords)
-            activation_list = [0,0,0,0,0]
+            activation_list = self.makeZeroList(16)
             for i in s:
                 if not i in weights.keys():
-                    weights[i] = [0,0,0,0,0]
+                    weights[i] = self.makeZeroList(16)
 
-                for a in range(5):
+                for a in range(16):
                     activation_list[a] += weights[i][a]
 
             # update weights
@@ -70,7 +69,7 @@ class learner:
             if estimate_label != real_label:
                 lx[real_label] += 1
                 for i in s:
-                    for a in range(5):
+                    for a in range(16):
                         if a == real_label:
                             weights[i][a] += 1
                         else:
@@ -79,11 +78,11 @@ class learner:
         json.dump(weights,j)
         result.writelines(str(weights) + "\n")
         j.close()
-        file.close()
         result.close()
+        cur.close()
+        conn.close()
         print(lx , sum(lx))
 if __name__ == "__main__":
-    training_set_number = input("enter training set number : ")
-    l = learner()
-    l.learning(training_set_number)
+    l = Learner()
+    l.learning()
 
