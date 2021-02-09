@@ -4,7 +4,7 @@ if __name__ == '__main__':
     conn = sqlite3.connect("ai_db.db")
     cur = conn.cursor()
 
-    file = open("test_set.txt" , 'r')
+    file = open("training_set2.txt" , 'r')
     column = "text," + "time," + "weather," + "occasion," + "rt"
     values = ""
     switch = {1:"0,1,0,0",
@@ -20,26 +20,11 @@ if __name__ == '__main__':
         values = "'" + text[0] + "'," + switch[int(text[1])]
         
         try:
-            cur.execute("INSERT INTO testSet (" + column + ") VALUES(" + values + ");")
+            cur.execute("INSERT INTO sample (" + column + ") VALUES(" + values + ");")
         except:
             continue
         #l = cur.execute("SELECT sql FROM sqlite_master WHERE tbl_name = 'sample' AND type = 'table'")
     conn.commit()
     cur.close()
     conn.close()
-
-'''result = open('training_set2.txt' , 'w')
-
-while True:
-    line = file.readline() 
-    if not line: 
-        break
-    print(line)
-    text = line.split("/")
-    print(text[0] , text[1])
-    text = text[1][:-1] + "/" + text[0]
-    #print(text)
-
-    result.writelines(text + "\n")
-file.close()
-result.close()'''
+    file.close()
