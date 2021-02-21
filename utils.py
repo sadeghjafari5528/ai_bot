@@ -2,6 +2,8 @@ from hazm import *
 import datetime
 from final_code_aibot_first_part.config import *
 import functions
+from phase_parser.time import timeParser
+from phase_parser.date import dateParser
 
 class Util:
     def numberize(self , text_tokenize):
@@ -57,10 +59,10 @@ class Parser():
         return text
 
     def dateParser(self , text):
-        return text
+        return dateParser(text) 
 
     def timeParser(self , text):
-        return text
+        return text#timeParser(text)
 
     def religiousTimeParser(self , text):
         return text

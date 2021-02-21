@@ -133,6 +133,7 @@ def getJsonResult(text):
 
             #phrase = phrase[:-1]
             print(phrase , pre_tag)
+            phrase = phrase[:-1]
             if pre_tag == 1:
                 answer['city'].append(p.cityParser(phrase))
             elif pre_tag == 2:
@@ -201,7 +202,7 @@ def getFinalOutPut(text):
 if __name__ == "__main__":
     #print(getIntent("امروز اذان ظهر چه زمانی است؟"))
     #print(decodeIntent(5))
-    text = 'اذان صبح به افق تهران ساعت چند است؟'
+    text = 'دمای هوای تهران ساعت  ۹و  ۱۰دقیقه چند درجه است؟'
     print(text)
     getJsonResult(text)
     #print(getArgument(text , getIntent(text)))
