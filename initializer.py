@@ -3,7 +3,7 @@ import json
 class initializer:
 
     def initialize(self):
-        j = open('weights.txt' , 'w')
+        j = open('weights.json' , 'w')
         data = {}
         json.dump(data,j)
         j.close()

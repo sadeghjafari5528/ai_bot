@@ -1,40 +1,41 @@
 from __future__ import unicode_literals
 import json
 from hazm import *
-from learning import Learner
 import sqlite3
+from utils import Util
 
 class Tester:
 
     def testing(self):
         print("testing")
-        learner = Learner()
+        u = Util()
         conn = sqlite3.connect("ai_db.db")
         cur = conn.cursor()
         l = cur.execute("select text , label from testSet")
-        j = open('weights.txt' , 'r')
+        j = open('weights.json' , 'r')
         weights = json.load(j)
         j.close()
         no_test = 0
         no_currect = 0
         #stopwords = list(open('resources/stopwords.txt' , 'r' , encoding="utf8").read().splitlines())
-        lx = learner.makeZeroList(16)
+        lx = u.makeZeroList(16)
+        
         for test in list(l):
             real_label = int(test[1])
             text = test[0]
             
-            s = learner.text_proccessor(text)
+            s = u.text_proccessor(text)
             #s = l.deleteStopWords(s , stopwords)
-            activation_list = learner.makeZeroList(16)
+            activation_list = u.makeZeroList(16)
             for i in s:
                 if not i in weights.keys():
-                    weights[i] = learner.makeZeroList(16)
+                    weights[i] = u.makeZeroList(16)
 
                 for a in range(16):
                     activation_list[a] += weights[i][a]
 
             # calculate result
-            estimate_label = learner.argMax(activation_list)
+            estimate_label = u.argMax(activation_list)
             #print(estimate_label)
             no_test += 1
             if estimate_label == real_label:
