@@ -59,10 +59,12 @@ class Parser():
         return text
 
     def dateParser(self , text):
+        #return text
         return dateParser(text) 
 
     def timeParser(self , text):
-        return text#timeParser(text)
+        #return text
+        return timeParser(text)
 
     def religiousTimeParser(self , text):
         return text

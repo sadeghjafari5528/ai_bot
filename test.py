@@ -3,6 +3,7 @@ import json
 from hazm import *
 import sqlite3
 from utils import Util
+import numberize
 
 class Tester:
 
@@ -23,8 +24,8 @@ class Tester:
         for test in list(l):
             real_label = int(test[1])
             text = test[0]
-            
-            s = u.text_proccessor(text)
+            s = numberize.numberize(text)
+            #s = u.text_proccessor(text)
             #s = l.deleteStopWords(s , stopwords)
             activation_list = u.makeZeroList(16)
             for i in s:

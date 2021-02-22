@@ -1,2 +1,2 @@
-{'type': ['1'], 'city': ['تهران'], 'date': [], 'time': ['ساعت ۹و ۱۰ دقیقه'], 'religious_time': [], 'calendar_type': [], 'event': [], 'api_url': [], 'result': []}
-['دما', 'هوا', 'تهران', 'ساعت', '۹و', '۱۰', 'دقیقه', 'چند', 'درجه', '#است', '؟']
+{'type': ['2'], 'city': ['قم'], 'date': ['2021-02-18'], 'time': [], 'religious_time': ['اذان ظهر'], 'calendar_type': [], 'event': [], 'api_url': ['http://api.aladhan.com/v1/calendarByCity?city=قم&country= &method=7&month=2&year=2021'], 'result': ['12:20']}
+['اذان', 'ظهر', 4, 'روز', 'پیش', 'قم', 'چه', 'ساعتی', 'بود', '؟']

@@ -1,6 +1,8 @@
 from utils import Parser , Util
 import json
 from hazm import *
+import numberize
+from api_handler import religios
 
 def decodeIntent(intent):
     result = []
@@ -18,7 +20,9 @@ def decodeIntent(intent):
         k += [0,0]
     elif len(k) == 1:
         k += [0,0,0]
-    print(k)
+    elif len(k) == 0:
+        k = [0,0,0,0]
+    
     if k[0] == 1:
         result.append('2')
     if k[1] == 1:
@@ -66,7 +70,14 @@ def getArgument(s):
     len_s = len(s)
     for word in s:
         w_i += 1
+        try:
+            word = int(word)
+            word = str(type(int))
+        except:
+            pass
         if not word in weights.keys():
+            #try:
+
             result.append(1)
         else:
             x = []
@@ -122,7 +133,8 @@ def getJsonResult(text):
     answer = {'type': [], 'city': [], 'date': [],'time': [], 'religious_time': [],'calendar_type': [], 'event': [], 'api_url': [], 'result': []} 
     u = Util()
     p = Parser()
-    s = u.text_proccessor(text)
+    s = numberize.numberize(text)
+    #s = u.text_proccessor(text)
     answer['type'] = decodeIntent(getIntent(s))
     arguments = getArgument(s)
     print(arguments , answer['type'])
@@ -147,14 +159,28 @@ def getJsonResult(text):
             elif pre_tag == 6:
                 answer['event'].append(p.eventParser(phrase))
             
-            phrase = s[w_i] + ' '
+            phrase = str(s[w_i]) + ' '
         else:
-            phrase += s[w_i] + ' '
+            phrase += str(s[w_i]) + ' '
         pre_tag = arguments[w_i]
+    
+    for i in range(len(answer['type'])):
+        if answer["type"][i] == '2':
+            print('tuple' , answer['date'])
+            answer['date'] = [answer['date'][0][0][-1][0]]
+            
+            if len(answer["date"]) == 1:
+                date = answer["date"][0]
+            else:
+                date = answer["date"][i]
+            req,date,URL = religios.aladhan(answer['city'][i] , date)
+            answer["result"].append(religios.azan(req , text , date))
+            answer["api_url"].append(URL)
+            answer['date'] = [answer['date'][0].strftime("%Y-%m-%d")]
+
     with open("result.txt" , 'w') as f:
         f.writelines(str(answer) + "\n")
         f.writelines(str(s) + "\n")
-
 
     '''chunker = Chunker(model='resources/chunker.model')
     tagger = POSTagger(model='resources/postagger.model')
@@ -202,7 +228,8 @@ def getFinalOutPut(text):
 if __name__ == "__main__":
     #print(getIntent("امروز اذان ظهر چه زمانی است؟"))
     #print(decodeIntent(5))
-    text = 'دمای هوای تهران ساعت  ۹و  ۱۰دقیقه چند درجه است؟'
-    print(text)
+    text = 'اذان ظهر  ۴ روز پیش قم چه ساعتی بود؟ '
+    #print(text)
     getJsonResult(text)
     #print(getArgument(text , getIntent(text)))
+    

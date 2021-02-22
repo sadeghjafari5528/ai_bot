@@ -43,7 +43,7 @@ START
 
 """
 
-text="امروز اذان ظهر ، ساعت 12:11 است ؟"
+text=""
 file = r"robot.wav"
 aryana(text , file)
 
